@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodiak Judge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0d0b; --bg-2: #121410; --line: #2a2c26; --line-2: #3a3c34;
+  --ink: #ece6d8; --ink-2: #b8b2a3; --mute: #7e7a6e;
+  --accent: #ff5a1f; --accent-ink: #160803; --ice: #9fd3d0; --ok: #9fd3d0;
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: .05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+::selection { background: var(--accent); color: var(--accent-ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); }
+.nav { display: flex; align-items: center; justify-content: space-between; height: 64px; border-bottom: 1px solid var(--line); }
+.brand { font: 600 15px/1 var(--sans); letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px; }
+.mark { width: 22px; height: 22px; border: 1.5px solid var(--ink); border-radius: 50%; position: relative; }
+.mark::after { content: ""; position: absolute; inset: 6px; background: var(--accent); border-radius: 50%; }
+.nav a { color: var(--ink-2); text-decoration: none; font-size: 14px; border: 1px solid var(--line-2); padding: 8px 14px; border-radius: 999px; }
+.nav a:hover { border-color: var(--accent); color: var(--ink); }
+.eyebrow { margin: 0 0 18px; font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); display: flex; align-items: center; gap: 10px; }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 2.2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,90,31,.6); } 70% { box-shadow: 0 0 0 10px rgba(255,90,31,0); } 100% { box-shadow: 0 0 0 0 rgba(255,90,31,0); } }
+header.hero { padding: clamp(40px, 7vw, 84px) 0 clamp(28px, 4vw, 44px); }
+h1 { margin: 0; font: 400 clamp(52px, 8vw, 104px)/.9 var(--serif); letter-spacing: -0.035em; }
+h1 em, h2 em { font-style: italic; }
+h1 em { color: var(--accent); }
+h2 { margin: 0 0 14px; font: 400 clamp(28px, 3.4vw, 40px)/1 var(--serif); letter-spacing: -0.02em; }
+h2 em { color: var(--ice); }
+.lede { font-size: clamp(16px, 1.4vw, 18px); color: var(--ink-2); max-width: 64ch; margin: 24px 0 0; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.console { background: linear-gradient(180deg, rgba(21,23,19,.92), rgba(14,15,13,.96)); border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: 0 40px 80px -30px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.02) inset; overflow: hidden; min-width: 0; }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); font: 400 12px/1 var(--mono); color: var(--mute); }
+.bar b { color: var(--ink); font-weight: 400; }
+.dots { display: flex; gap: 6px; } .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-2); display: block; }
+.body { padding: 18px; }
+label { display: block; font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin: 0 0 8px; }
+textarea { width: 100%; min-height: 120px; resize: vertical; padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg-2);
+  color: var(--ink); font: 400 14px/1.5 var(--sans); }
+textarea:focus { border-color: var(--line-2); outline: none; }
+textarea.q { min-height: 60px; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+@media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 16px; }
+.btn { appearance: none; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; font: 500 15px/1 var(--sans);
+  border-radius: 999px; border: 1px solid var(--line-2); background: transparent; color: var(--ink); transition: transform .2s, background .2s, border-color .2s; }
+.btn:hover { transform: translateY(-1px); border-color: var(--ink-2); }
+.btn-solid { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn-solid:hover { background: #ff7440; border-color: #ff7440; }
+select { appearance: none; cursor: pointer; padding: 11px 16px; border-radius: 999px; border: 1px solid var(--line-2); background: transparent; color: var(--ink-2); font: 400 14px/1 var(--sans); max-width: 100%; }
+select option { background: var(--bg-2); color: var(--ink); }
+.slider { display: flex; align-items: center; gap: 12px; font: 400 12px/1 var(--mono); color: var(--ink-2); }
+input[type=range] { width: 150px; accent-color: var(--accent); }
+.out-empty { color: var(--mute); font: 400 13px/1.6 var(--mono); padding: 28px 0; text-align: center; }
+.badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; font: 500 12px/1 var(--mono); letter-spacing: .1em; }
+.badge.accept { color: var(--ice); border: 1px solid rgba(159,211,208,.45); background: rgba(159,211,208,.08); }
+.badge.escalate { color: var(--accent); border: 1px solid rgba(255,90,31,.5); background: rgba(255,90,31,.08); }
+.verdict { font: 400 clamp(34px, 3.6vw, 46px)/1 var(--serif); letter-spacing: -0.02em; margin: 14px 0 6px; }
+.reason { color: var(--ink-2); font-size: 14px; margin: 0 0 18px; }
+.meta { font: 400 12px/1.4 var(--mono); color: var(--mute); }
+.bars { display: grid; gap: 10px; margin: 6px 0 4px; }
+.b { display: grid; grid-template-columns: 112px 1fr 44px; gap: 10px; align-items: center; font: 400 12px/1 var(--mono); color: var(--ink-2); }
+.track { height: 6px; background: var(--line); border-radius: 6px; overflow: hidden; }
+.fill { height: 100%; background: var(--ink-2); border-radius: 6px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+.fill.top { background: var(--accent); }
+.orders { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+.ord { border: 1px solid var(--line); border-radius: 6px; padding: 12px; }
+.ord .k { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-bottom: 8px; }
+.ord .v { font-size: 15px; }
+.ord .c { font: 400 12px/1 var(--mono); color: var(--mute); margin-top: 4px; }
+.note { margin: 14px 0 0; font-size: 14px; padding: 12px 14px; border-radius: 6px; border: 1px solid var(--line); color: var(--ink-2); }
+.note.bias { border-color: rgba(255,90,31,.45); color: var(--ink); background: rgba(255,90,31,.06); }
+.note.bias b { color: var(--accent); font-weight: 600; }
+section.more { padding: clamp(40px, 6vw, 72px) 0; }
+table { width: 100%; border-collapse: collapse; font: 400 13px/1.4 var(--mono); }
+th { text-align: left; color: var(--mute); font-weight: 400; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 0 8px 10px; border-bottom: 1px solid var(--line); }
+td { padding: 10px 8px; border-bottom: 1px solid var(--line); color: var(--ink-2); }
+td.hi { color: var(--ink); }
+pre { margin: 0; font: 400 12.5px/1.6 var(--mono); color: var(--ink-2); white-space: pre-wrap; word-break: break-word; }
+pre .s { color: var(--ice); } pre .k { color: var(--accent); }
+.fine { font: 400 12px/1.5 var(--mono); color: var(--mute); margin: 14px 0 0; }
+footer { border-top: 1px solid var(--line); padding: 22px 0 40px; font: 400 12px/1.5 var(--mono); color: var(--mute); }
+footer a { color: var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav">
+    <div class="brand"><span class="mark"></span>Kodiak Judge</div>
+    <a href="https://huggingface.co/cortex-agent-llc/kodiak-v0.4-1b" target="_blank" rel="noopener">Model on Hugging Face</a>
+  </nav>
+
+  <header class="hero">
+    <p class="eyebrow"><span class="pulse"></span>Kodiak-v0.4-1B · running locally</p>
+    <h1>Accept when <em>confident.</em><br>Escalate when unsure.</h1>
+    <p class="lede">Paste a question and two answers. Kodiak decides which is better in a few dozen milliseconds, and says so only when it's
+      sure. Everything else goes to a person or an LLM. <strong>Every pair is judged in both orders</strong>, so a preference for the first
+      or second slot can't decide the verdict.</p>
+  </header>
+
+  <div class="grid">
+    <div class="console">
+      <div class="bar"><div class="dots"><i></i><i></i><i></i></div><b>POST /v1/judge</b><span>input</span></div>
+      <div class="body">
+        <label for="q">Question</label>
+        <textarea id="q" class="q" placeholder="What did the user ask?"></textarea>
+        <div class="pair">
+          <div><label for="a1">Answer 1</label><textarea id="a1"></textarea></div>
+          <div><label for="a2">Answer 2</label><textarea id="a2"></textarea></div>
+        </div>
+        <div class="row">
+          <button class="btn btn-solid" id="go">Judge →</button>
+          <select id="ex" aria-label="Examples"><option value="">Try an example</option></select>
+        </div>
+        <div class="row slider">
+          <label for="t" style="margin:0">Accept at</label>
+          <input id="t" type="range" min="0.4" max="0.95" step="0.05" value="0.7">
+          <span id="tv">0.70</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="console" aria-live="polite">
+      <div class="bar"><div class="dots"><i></i><i></i><i></i></div><b>verdict</b><span id="ms">–</span></div>
+      <div class="body" id="out"><div class="out-empty">Pick an example or paste your own pair,<br>then press Judge.</div></div>
+    </div>
+  </div>
+
+  <section class="more">
+    <div class="grid">
+      <div>
+        <p class="eyebrow">Measured, not promised</p>
+        <h2>How often it's <em>right</em> when it decides</h2>
+        <div id="curve" class="fine">Loading the measurement…</div>
+      </div>
+      <div>
+        <p class="eyebrow">API</p>
+        <h2>One <em>POST</em></h2>
+        <div class="console"><div class="bar"><div class="dots"><i></i><i></i><i></i></div><b>curl</b><span>json</span></div>
+          <div class="body"><pre id="curl"></pre></div></div>
+        <p class="fine">Also POST /v1/judge/batch with {"items": [...]} (up to 64 pairs), GET /v1/info and GET /health.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>Kodiak is an open 1B decision model (Apache-2.0). Pairwise judging is one of its skills; the measurement above is on expert-judged
+    MT-Bench pairs (CC BY 4.0). Built after <a href="https://arxiv.org/abs/2609.26550" target="_blank" rel="noopener">JEV-as-a-Judge</a>.
+    Source: <a href="https://github.com/grizzlypeaksoftware/kodiak" target="_blank" rel="noopener">github.com/grizzlypeaksoftware/kodiak</a></footer>
+</div>
+<script>
+const EXAMPLES = {
+  "Faithful summary vs. made-up summary": {
+    q: "Summarize: 'The meeting moved from Tuesday to Thursday at 3 pm because the client is travelling.'",
+    a1: "The meeting is now Thursday at 3 pm because the client is travelling.",
+    a2: "The client cancelled the meeting."},
+  "Working code vs. broken code": {
+    q: "Write a Python function that returns the square of a number.",
+    a1: "def square(x):\n    return x * x",
+    a2: "def square(x):\n    return x + x"},
+  "World knowledge (it escalates)": {
+    q: "What is the capital of Australia?",
+    a1: "The capital of Australia is Canberra.",
+    a2: "The capital of Australia is Sydney, its largest and best-known city."},
+  "Longer isn't better": {
+    q: "Is it safe to give ibuprofen to my dog?",
+    a1: "No. Ibuprofen is toxic to dogs even in small doses and can cause stomach ulcers and kidney damage. Call your vet before giving any human medicine.",
+    a2: "Ibuprofen is a common anti-inflammatory that many people use for pain. It works by blocking enzymes involved in inflammation. Dogs also feel pain, and anti-inflammatories are often used in veterinary care, so a small dose based on weight is usually fine for short-term relief."},
+  "Correct vs. confidently wrong": {
+    q: "What is the boiling point of water at sea level in Fahrenheit?",
+    a1: "Water boils at 212 degrees Fahrenheit at sea level, which is 100 degrees Celsius.",
+    a2: "At sea level water boils at 200 degrees Fahrenheit. This is a well-known constant used in cooking and chemistry."},
+  "Same quality, different style": {
+    q: "How do I undo my last git commit but keep the changes?",
+    a1: "Run `git reset --soft HEAD~1`. The commit is removed and your changes stay staged.",
+    a2: "Use git reset with the soft flag: `git reset --soft HEAD~1`. It moves HEAD back one commit and keeps your changes in the staging area."},
+  "Hard case: both partly right": {
+    q: "Should I pay off my credit card or invest the money?",
+    a1: "Pay off the credit card first. Card interest is usually around 20% or more, which is higher than you can reliably earn by investing.",
+    a2: "It depends. If your card has a 0% promotional rate, investing might come out ahead, but most cards charge high interest, so paying them off is usually the safer choice."}
+};
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const NAMES = {first: "Answer 1 is better", second: "Answer 2 is better", tie: "About equally good"};
+const SHORT = {first: "answer 1", second: "answer 2", tie: "tie"};
+Object.keys(EXAMPLES).forEach(k => $("ex").add(new Option(k, k)));
+const load = k => { const e = EXAMPLES[k]; if (e) { $("q").value = e.q; $("a1").value = e.a1; $("a2").value = e.a2; } };
+$("ex").onchange = () => load($("ex").value);
+$("t").oninput = () => { $("tv").textContent = Number($("t").value).toFixed(2); };
+const topP = p => Math.max(...Object.values(p));
+function bars(p) {
+  const best = Object.keys(p).reduce((a, b) => p[a] >= p[b] ? a : b);
+  return `<div class="bars">${["first","second","tie"].map(k => `<div class="b"><span>${SHORT[k]}</span>
+    <span class="track"><span class="fill ${k === best ? "top" : ""}" style="display:block;width:${(p[k]*100).toFixed(1)}%"></span></span>
+    <span>${p[k].toFixed(2)}</span></div>`).join("")}</div>`;
+}
+async function run() {
+  const body = {question: $("q").value, answer_1: $("a1").value, answer_2: $("a2").value, threshold: Number($("t").value)};
+  if (!body.question.trim() || !body.answer_1.trim() || !body.answer_2.trim()) { $("out").innerHTML = `<div class="out-empty">Fill in the question and both answers.</div>`; return; }
+  $("out").innerHTML = `<div class="out-empty">Judging both orders…</div>`;
+  try {
+    const r = await fetch("/v1/judge", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || r.status);
+    const o = d.orders;
+    $("ms").textContent = `${d.ms} ms · 2 passes`;
+    $("out").innerHTML = `
+      <span class="badge ${d.action}">${d.action === "accept" ? "● ACCEPT" : "↗ ESCALATE"}</span>
+      <div class="verdict">${NAMES[d.verdict]}</div>
+      <p class="reason">${esc(d.reason[0].toUpperCase() + d.reason.slice(1))}.</p>
+      <p class="meta">Averaged over both orders · confidence ${d.confidence.toFixed(2)} · accept at ${d.threshold.toFixed(2)}</p>
+      ${bars(d.probs)}
+      <div class="orders">
+        <div class="ord"><div class="k">As given</div><div class="v">${NAMES[o.as_given.verdict]}</div><div class="c">${topP(o.as_given.probs).toFixed(2)}</div></div>
+        <div class="ord"><div class="k">Answers swapped</div><div class="v">${NAMES[o.swapped.verdict]}</div><div class="c">${topP(o.swapped.probs).toFixed(2)}</div></div>
+      </div>
+      ${o.disagree
+        ? `<p class="note bias"><b>Position bias caught.</b> The verdict flipped when the answers swapped places, so it isn't trusted, however confident one order looked.</p>`
+        : `<p class="note">Same verdict in both orders: the answers' positions didn't decide it.</p>`}`;
+  } catch (e) { $("out").innerHTML = `<div class="out-empty">${esc(e.message)}</div>`; }
+}
+$("go").onclick = run;
+const want = new URLSearchParams(location.search).get("ex");  // ?ex=<example name>: load it and judge (for links and screenshots)
+if (want && EXAMPLES[want]) { $("ex").value = want; load(want); run(); }
+$("curl").innerHTML = `curl ${esc(location.origin)}/v1/judge \\
+  -H <span class="s">'Content-Type: application/json'</span> \\
+  -d <span class="s">'{"question": "...", "answer_1": "...",
+       "answer_2": "...", "threshold": 0.7}'</span>
+
+<span class="k">→</span> {"verdict": "first", "confidence": 0.83,
+   "action": "accept", "orders": {"disagree": false, ...}}`;
+fetch("/v1/info").then(r => r.json()).then(i => {
+  const m = i.measured; if (!m) { $("curve").textContent = "No measurement loaded."; return; }
+  const p = m.policies["both orders + escalate on disagreement"], one = m.policies["one order"];
+  const rows = p.curve.filter(c => c.threshold >= 0.5);
+  $("curve").innerHTML = `<table><thead><tr><th>Accept at</th><th>Kodiak decides</th><th>Right when it decides</th><th>One order only</th></tr></thead><tbody>
+    ${rows.map(c => { const o = one.curve.find(x => x.threshold === c.threshold);
+      return `<tr><td>${c.threshold.toFixed(1)}</td><td class="hi">${(c.accepted_share*100).toFixed(0)}%</td><td class="hi">${c.accuracy_when_accepted == null ? "–" : (c.accuracy_when_accepted*100).toFixed(0) + "%"}</td><td>${o && o.accuracy_when_accepted != null ? (o.accuracy_when_accepted*100).toFixed(0) + "% of " + (o.accepted_share*100).toFixed(0) + "%" : "–"}</td></tr>`; }).join("")}
+    </tbody></table>
+    <p class="fine">${esc(m.eval)}. Judged across everything it is right ${(p.accuracy_all*100).toFixed(0)}% of the time; random is 33%.
+      Swapping the two answers changes ${(m.orders_disagree_share*100).toFixed(0)}% of one-order verdicts, which is why every pair is judged both ways.</p>`;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+[project]
+name = "kodiak-judge"
+version = "0.1.0"
+description = "Kodiak as a judge: which of two answers is better? Accept when confident, escalate when unsure. A local API and web page."
+readme = "README.md"
+license = "Apache-2.0"
+authors = [{ name = "Shane Larson" }]
+requires-python = ">=3.12"
+dependencies = ["kodiak-s1[infer]"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["kodiak_judge"]
+
+[tool.uv.sources]
+# Local development next to the Kodiak repo. Elsewhere: kodiak-s1 = { git = "https://github.com/grizzlypeaksoftware/kodiak" }
+kodiak-s1 = { path = "../kodiak", editable = true }
+torch = { index = "pytorch-cu130" }
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true

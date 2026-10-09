@@ -1,0 +1,112 @@
+{
+  "model": "../kodiak/dist/kodiak-v0.4-1b-accuracy",
+  "eval": "MT-Bench human judgments, 150 pairs (random = 0.33)",
+  "orders_disagree_share": 0.187,
+  "policies": {
+    "one order": {
+      "accuracy_all": 0.54,
+      "curve": [
+        {
+          "threshold": 0.0,
+          "accepted_share": 1.0,
+          "accuracy_when_accepted": 0.54
+        },
+        {
+          "threshold": 0.5,
+          "accepted_share": 0.793,
+          "accuracy_when_accepted": 0.597
+        },
+        {
+          "threshold": 0.6,
+          "accepted_share": 0.64,
+          "accuracy_when_accepted": 0.635
+        },
+        {
+          "threshold": 0.7,
+          "accepted_share": 0.48,
+          "accuracy_when_accepted": 0.681
+        },
+        {
+          "threshold": 0.8,
+          "accepted_share": 0.407,
+          "accuracy_when_accepted": 0.721
+        },
+        {
+          "threshold": 0.9,
+          "accepted_share": 0.273,
+          "accuracy_when_accepted": 0.732
+        }
+      ]
+    },
+    "both orders averaged": {
+      "accuracy_all": 0.56,
+      "curve": [
+        {
+          "threshold": 0.0,
+          "accepted_share": 1.0,
+          "accuracy_when_accepted": 0.56
+        },
+        {
+          "threshold": 0.5,
+          "accepted_share": 0.767,
+          "accuracy_when_accepted": 0.6
+        },
+        {
+          "threshold": 0.6,
+          "accepted_share": 0.66,
+          "accuracy_when_accepted": 0.646
+        },
+        {
+          "threshold": 0.7,
+          "accepted_share": 0.507,
+          "accuracy_when_accepted": 0.684
+        },
+        {
+          "threshold": 0.8,
+          "accepted_share": 0.387,
+          "accuracy_when_accepted": 0.707
+        },
+        {
+          "threshold": 0.9,
+          "accepted_share": 0.24,
+          "accuracy_when_accepted": 0.722
+        }
+      ]
+    },
+    "both orders + escalate on disagreement": {
+      "accuracy_all": 0.56,
+      "curve": [
+        {
+          "threshold": 0.0,
+          "accepted_share": 0.813,
+          "accuracy_when_accepted": 0.623
+        },
+        {
+          "threshold": 0.5,
+          "accepted_share": 0.733,
+          "accuracy_when_accepted": 0.627
+        },
+        {
+          "threshold": 0.6,
+          "accepted_share": 0.653,
+          "accuracy_when_accepted": 0.653
+        },
+        {
+          "threshold": 0.7,
+          "accepted_share": 0.507,
+          "accuracy_when_accepted": 0.684
+        },
+        {
+          "threshold": 0.8,
+          "accepted_share": 0.387,
+          "accuracy_when_accepted": 0.707
+        },
+        {
+          "threshold": 0.9,
+          "accepted_share": 0.24,
+          "accuracy_when_accepted": 0.722
+        }
+      ]
+    }
+  }
+}
