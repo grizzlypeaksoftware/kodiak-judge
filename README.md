@@ -59,6 +59,7 @@ curl http://127.0.0.1:8790/v1/judge -H 'Content-Type: application/json' \
  "orders": {"as_given": {"verdict": "first"}, "swapped": {"verdict": "first"}, "disagree": false}, "ms": 50.7}
 ```
 
+- When `action` is `"escalate"`, treat `verdict` as a lean, not an answer.
 - `POST /v1/judge/batch` with `{"items": [{"question", "answer_1", "answer_2"}, ...]}` (up to 64 pairs)
 - `GET /v1/info`: model, default threshold and the measured curve
 - `GET /health`
