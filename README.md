@@ -34,10 +34,11 @@ does the wrong thing) and weak on world knowledge, where it usually escalates: a
 
 ## Run it
 
-Needs the [Kodiak](https://github.com/grizzlypeaksoftware/kodiak) repo checked out next to this one (see `pyproject.toml`), and a GPU
-for best speed (CPU works, slower).
+Installs [Kodiak](https://github.com/grizzlypeaksoftware/kodiak) from GitHub and downloads the model from Hugging Face on first run. A GPU
+is best (about 50 ms per pair); a CPU works, slower.
 
 ```bash
+git clone https://github.com/grizzlypeaksoftware/kodiak-judge && cd kodiak-judge
 uv sync
 uv run python -m kodiak_judge.server --curve reports/curve-v0.4-1b.json      # http://127.0.0.1:8790
 # accuracy mode (3 models, ~3x compute):

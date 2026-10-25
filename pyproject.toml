@@ -16,8 +16,9 @@ build-backend = "hatchling.build"
 packages = ["kodiak_judge"]
 
 [tool.uv.sources]
-# Local development next to the Kodiak repo. Elsewhere: kodiak-s1 = { git = "https://github.com/grizzlypeaksoftware/kodiak" }
-kodiak-s1 = { path = "../kodiak", editable = true }
+# Kodiak comes from its public repo. To develop against a local checkout instead:
+# kodiak-s1 = { path = "../kodiak", editable = true }
+kodiak-s1 = { git = "https://github.com/grizzlypeaksoftware/kodiak" }
 torch = { index = "pytorch-cu130" }
 
 [[tool.uv.index]]

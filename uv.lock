@@ -255,12 +255,12 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "kodiak-s1", extras = ["infer"], editable = "../kodiak" }]
+requires-dist = [{ name = "kodiak-s1", extras = ["infer"], git = "https://github.com/grizzlypeaksoftware/kodiak" }]
 
 [[package]]
 name = "kodiak-s1"
 version = "0.0.1"
-source = { editable = "../kodiak" }
+source = { git = "https://github.com/grizzlypeaksoftware/kodiak#20c53ff03402c09f44f66665a8721d93e4d239a5" }
 dependencies = [
     { name = "pydantic" },
 ]
@@ -273,35 +273,6 @@ infer = [
     { name = "scipy" },
     { name = "tokenizers" },
     { name = "torch" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "datasets", marker = "extra == 'data'", specifier = ">=3.0" },
-    { name = "huggingface-hub", marker = "extra == 'data'", specifier = ">=0.25" },
-    { name = "huggingface-hub", marker = "extra == 'infer'", specifier = ">=0.25" },
-    { name = "numpy", marker = "extra == 'infer'", specifier = ">=1.26" },
-    { name = "numpy", marker = "extra == 'train'", specifier = ">=1.26" },
-    { name = "onnx", marker = "extra == 'onnx'", specifier = ">=1.17" },
-    { name = "onnxruntime", marker = "extra == 'onnx'", specifier = ">=1.20" },
-    { name = "onnxscript", marker = "extra == 'onnx'", specifier = ">=0.2" },
-    { name = "pydantic", specifier = ">=2.7" },
-    { name = "safetensors", marker = "extra == 'infer'", specifier = ">=0.4" },
-    { name = "safetensors", marker = "extra == 'train'", specifier = ">=0.4" },
-    { name = "scipy", marker = "extra == 'infer'", specifier = ">=1.11" },
-    { name = "scipy", marker = "extra == 'train'", specifier = ">=1.11" },
-    { name = "tokenizers", marker = "extra == 'data'", specifier = ">=0.20" },
-    { name = "tokenizers", marker = "extra == 'infer'", specifier = ">=0.20" },
-    { name = "torch", marker = "extra == 'infer'", specifier = ">=2.9", index = "https://download.pytorch.org/whl/cu130" },
-    { name = "torch", marker = "extra == 'train'", specifier = ">=2.9", index = "https://download.pytorch.org/whl/cu130" },
-]
-provides-extras = ["data", "infer", "train", "onnx"]
-
-[package.metadata.requires-dev]
-baselines = [{ name = "gliclass", specifier = ">=0.1.20" }]
-dev = [
-    { name = "pytest", specifier = ">=8" },
-    { name = "transformers", specifier = ">=4.48" },
 ]
 
 [[package]]
